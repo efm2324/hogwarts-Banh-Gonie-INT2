@@ -35,3 +35,23 @@ def receive_letter():
         exit(0)
 
 def meet_hagrid():
+    print(
+    "On your way to Diagon Alley, a giant of man with a wild beard and kind eyes approaches you. \n“Hello there! I'm Hagrid, Keeper of Keys and Grounds at Hogwarts. \nLet me help you get your school supplies!” \n"
+    )
+    while True:
+        try:
+            answer = int(input("1. Yes \n2. No ").strip())
+        except ValueError:
+            print("Invalid input. Please enter the number 1 or 2.")
+            continue
+
+        print("Your choice : ", answer)
+        if answer == 1:
+            print("Hagrid takes you to Diagon Alley, where you buy your wand, books, and robes.")
+            break
+        elif answer == 2:
+            print("Hagrid gently insists and takes you along anyway!")
+            break
+        else:
+            print("Invalid choice. Please choose 1 or 2.")
+        
