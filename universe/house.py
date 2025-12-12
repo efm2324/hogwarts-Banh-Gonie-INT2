@@ -49,13 +49,25 @@ def display_winning_house(houses):
         print(f"It's a tie! {', '.join(winning_houses)} are tied with {max_points} points!")
     else:
         print(f"The winning house is {winning_houses[0]} with {max_points} points!")
-
-def assign_house(character, questions):
-
-
-
-print(update_house_points(houses, "Gryffindor", 10)) #Test
-print(display_winning_house(houses))
-
+        
+def assign_house(questions, houses):
+    for question, options, house_mapping in questions:
+        print("\n" + question)
+        for i, option in enumerate(options, 1):
+            print(f"{i}. {option}")
+        
+        while True:
+            try:
+                choice = int(input("Your choice: "))
+                if 1 <= choice <= 4:
+                    selected_house = house_mapping[choice - 1]
+                    houses[selected_house] += 1
+                    break
+                else:
+                    print("Please select a valid option.")
+            except ValueError:
+                print("Please enter a number between 1 and 4.")
+    
+    display_winning_house(houses)
 
 
