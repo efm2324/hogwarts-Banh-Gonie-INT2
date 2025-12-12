@@ -4,10 +4,11 @@ from pathlib import Path
 # Add the parent directory to sys.path so we can import utils (doesn't work without this)
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from universe.character import init_character, display_character
+from universe.character import init_character
+from universe.character import display_character
 
 def introduction():
-    print(".")
+    print(".")# Placeholder for introduction text
 
 def create_character():
     first_name = input("Enter your first name: ")
@@ -25,7 +26,7 @@ def create_character():
 def receive_letter():
     print(
     "An owl flies through the window, delivering a letter sealed with the Hogwarts crest... \n“Dear Student, \nWe are pleased to inform you that you have been accepted to Hogwarts School of Witchcraft and Wizardry!” \nDo you accept this invitation and go to Hogwarts?"
-    )
+    )# add time for dramatic effect
     answer = int(input("1. Yes, of course! \n2. No, I'd rather stay with Uncle Vernon... ").strip())
     print("Your choice : ", answer)
     if answer == 1:
