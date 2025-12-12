@@ -14,15 +14,19 @@ def init_character(last_name, first_name, attributes):
     return character
 
 def display_character(character):
-    print("Character Profile:")
-    print(f"Last name : {character.get('last_name')}")
-    print(f"First name : {character.get('first_name')}")
-    print(f"Money : {character.get('money')}")
-    print("Attributes :")
-    print(f"Spells : {', '.join(character.get('spells', []))}")
+    print("Character profile:")
+    print(f"Last name: {character.get('Last Name')}")
+    print(f"First name: {character.get('First Name')}")
+    print(f"Money: {character.get('Money', 0)}")
+    print("Inventory:")
+    print("Spells:")
     print("Attributes:")
-    for attr, value in character.get("Attributes", {}).items():
-        print(f" - {attr}: {value}")
+    attributes_dict = character.get("Attributes", {})
+    attribute_keys = ["Courage", "Intelligence", "Loyalty", "Ambition"]
+    for attr in attribute_keys:
+        value = attributes_dict.get(attr)
+        if value is not None:
+            print(f"- {attr}: {value}")
         
 def modify_money(character, amount):
     character["Money"] += amount
@@ -42,10 +46,4 @@ def add_item(character, key, item):
                 else:
                     character["Inventory"].append(item)
                 return True
-    """       
-    names = [e.get("name", "") for e in catalog]
-    suggestions = difflib.get_close_matches(item, names, n=3, cutoff=0.5)
-    if suggestions:
-        return f"Item not found. Did you mean: {', '.join(suggestions)}?" # Error 404
-    return "Item not found. Check spelling."
-    """
+    return "Item not found. Check spelling." #chech later for better method (difflib)
