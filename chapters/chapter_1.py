@@ -4,8 +4,8 @@ from pathlib import Path
 # Add the parent directory to sys.path so we can import utils (doesn't work without this)
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from universe.character import init_character, display_character, modify_money, add_item
-from utils.input_utils import load_file, ask_choice, ask_number
+from universe.character import init_character
+from universe.character import display_character
 
 def introduction():
     print(".")# Placeholder for introduction text
