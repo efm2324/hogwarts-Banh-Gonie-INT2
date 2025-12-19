@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+from utils.input_utils import load_file, ask_number, ask_choice
 
 # Add the parent directory to sys.path so we can import utils (doesn't work without this)
 sys.path.insert(0, str(Path(__file__).parent.parent))
