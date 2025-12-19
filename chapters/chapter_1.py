@@ -55,4 +55,40 @@ def meet_hagrid():
             break
         else:
             print("Invalid choice. Please choose 1 or 2.")
+    
+def buy_supplies(character):
+    print("Welcome to Diagon Alley!")
+
+    catalog = load_file("data/inventory.json") 
+
+    required_items = ["Magic Wand", "Wizard Robe", "Potions Book"] 
+
+    while required_items:
+        print(f"You have {character['Money']} Galleons.")
+        print(f"Remaining required items: {', '.join(required_items)}")
         
+        choice = ask_number("Enter the number of the item to buy: ")
+        
+    print("All required items purchased! Choose your pet:")
+    pets = ["Owl", "Cat", "Rat", "Toad"]
+    pet_prices = {"Owl": 20, "Cat": 15, "Rat": 10, "Toad": 5}
+    
+    pet_choice = ask_choice("Which pet do you want?", pets)
+
+    display_character(character)
+
+def start_chater_1():
+
+    introduction()
+
+    character = create_character()
+
+    receive_letter()
+
+    meet_hagrid(character)
+
+    buy_supplies(character)
+
+    print("\nEnd of Chapter 1! Your adventure begins at Hogwarts...")
+
+    return(character)
