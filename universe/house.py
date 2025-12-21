@@ -52,34 +52,56 @@ def display_winning_house(houses):
 
 
 def assign_house(character, questions):
-    """Ask the sorting questions and return the assigned house.
+    """Ask the sorting questions using only simple constructs and return the assigned house.
 
     `questions` is a list of tuples: (question_text, choices_list, houses_list)
+    This function uses basic variables and loops to tally votes and pick a winner.
     """
-    # initialize tally
-    tally = {"Gryffindor": 0, "Slytherin": 0, "Hufflepuff": 0, "Ravenclaw": 0}
+    gryff = 0
+    slyth = 0
+    huffle = 0
+    raven = 0
 
     for q_text, choices, houses in questions:
         print("\n" + q_text)
-        for i, choice in enumerate(choices, 1):
-            print(f"{i}. {choice}")
+        # show choices with simple loop
+        i = 1
+        for choice in choices:
+            print(str(i) + ". " + choice)
+            i += 1
 
-        # repeat until valid choice
+        # get valid choice
         while True:
-            answer = input("Your choice: ").strip()
-            if not answer.isdigit():
+            ans = input("Your choice: ").strip()
+            if not ans.isdigit():
                 print("Please enter the number of your choice.")
                 continue
-            idx = int(answer)
+            idx = int(ans)
             if idx < 1 or idx > len(choices):
                 print("Invalid choice number. Try again.")
                 continue
             chosen_house = houses[idx - 1]
-            tally[chosen_house] = tally.get(chosen_house, 0) + 1
+            if chosen_house == "Gryffindor":
+                gryff += 1
+            elif chosen_house == "Slytherin":
+                slyth += 1
+            elif chosen_house == "Hufflepuff":
+                huffle += 1
+            elif chosen_house == "Ravenclaw":
+                raven += 1
             break
 
-    # determine the winner (simple tie-break: first in list)
-    max_points = max(tally.values())
-    winning_houses = [h for h, p in tally.items() if p == max_points]
-    assigned_house = winning_houses[0]
-    return assigned_house
+    # determine winner with simple comparisons
+    winner = "Gryffindor"
+    max_points = gryff
+    if slyth > max_points:
+        winner = "Slytherin"
+        max_points = slyth
+    if huffle > max_points:
+        winner = "Hufflepuff"
+        max_points = huffle
+    if raven > max_points:
+        winner = "Ravenclaw"
+        max_points = raven
+
+    return winner
