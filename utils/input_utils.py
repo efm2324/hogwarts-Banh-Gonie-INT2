@@ -39,3 +39,4 @@ def load_file(file_path):
     except Exception as e:
         print(f"There was an error loading the file {file_path}: {e}")
     return None
+

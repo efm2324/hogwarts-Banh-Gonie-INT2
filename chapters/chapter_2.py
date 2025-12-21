@@ -105,3 +105,4 @@ def sorting_ceremony(character):
 
     print(f"\nThe Sorting Hat thinks for a moment, then announces: {assigned}!")
     input("\nPress Enter to continue...") 
+    
