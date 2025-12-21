@@ -60,4 +60,13 @@ def meet_friends(character):
 
     return character
 
-meet_friends({"Attributes": {}})
+def welcome_message():
+    message = (
+        "\nProfessor Albus Dumbledore rises and looks across the Great Hall, his eyes twinkling with warmth.\n"
+        "He speaks with a gentle, welcoming tone:\n\n"
+        "\"Welcome to Hogwarts!\" he says. "
+        "This place will test you, teach you, and give you friends for life.\n\n"
+        "Take a moment to read these words and let them sink in."
+    )
+    print(message)
+    input("\nPress Enter when you are ready to continue...")
