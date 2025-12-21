@@ -30,7 +30,9 @@ def create_character():
 
 def receive_letter():
     print(
-    "An owl flies through the window, delivering a letter sealed with the Hogwarts crest... \n“Dear Student, \nWe are pleased to inform you that you have been accepted to Hogwarts School of Witchcraft and Wizardry!” \nDo you accept this invitation and go to Hogwarts?"
+    "An owl flies through the window, delivering a letter sealed with the Hogwarts crest..." 
+    "\n“Dear Student, \nWe are pleased to inform you that you have been accepted to Hogwarts School of Witchcraft and Wizardry!”"
+    "\nDo you accept this invitation and go to Hogwarts?"
     )# add time for dramatic effect
     answer = int(input("1. Yes, of course! \n2. No, I'd rather stay with Uncle Vernon... ").strip())
     print("Your choice : ", answer)
@@ -42,7 +44,9 @@ def receive_letter():
 
 def meet_hagrid(character):
     print(
-    "On your way to Diagon Alley, a giant of man with a wild beard and kind eyes approaches you. \n“Hello there! I'm Hagrid, Keeper of Keys and Grounds at Hogwarts. \nLet me help you get your school supplies!” \n"
+    "On your way to Diagon Alley, a giant of man with a wild beard and kind eyes approaches you." 
+    "\n“Hello there! I'm Hagrid, Keeper of Keys and Grounds at Hogwarts."
+    "\nLet me help you get your school supplies!” \n"
     )
     while True:
         try:
