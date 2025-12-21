@@ -8,9 +8,9 @@ def meet_friends(character):
 
     # Ron
     print(
-        "You board the Hogwarts Express. The train slowly departs northward... \nA red-haired boy enters your compartment, looking friendly. \nHi! I'm Ron Weasley. Mind if I sit with you?\n")
+        "\nYou board the Hogwarts Express. The train slowly departs northward... \nA red-haired boy enters your compartment, looking friendly. \n\nHi! I'm Ron Weasley. Mind if I sit with you?\n")
     while True:
-        choice = input("1. Sure, have a seat!\n2. Sorry, I prefer to travel alone.\nYour choice: ").strip()
+        choice = input("1. Sure, have a seat!\n2. Sorry, I prefer to travel alone.\n\nYour choice: ").strip()
         if choice == "1":
             print("Ron smiles: — Awesome! You'll see, Hogwarts is amazing!")
             character['Attributes']['Loyalty'] = character['Attributes'].get('Loyalty', 0) + 1
@@ -24,7 +24,7 @@ def meet_friends(character):
     # Hermione
     print("\nA girl enters next, already carrying a stack of books. \n— Hello, I'm Hermione Granger. Have you ever read 'A History of Magic'?\n")
     while True:
-        choice = input("Yes, I love learning new things\n2. Uh… no, I prefer adventures over books. \nYour choice: ").strip()
+        choice = input("1. Yes, I love learning new things\n2. Uh… no, I prefer adventures over books.\n\nYour choice: ").strip()
         if choice == "1":
             print("Hermione smiles, impressed: — Oh, that's rare! You must be very clever!")
             character['Attributes']['Intelligence'] = character['Attributes'].get('Intelligence', 0) + 1
@@ -38,7 +38,7 @@ def meet_friends(character):
     # Draco (3 options)
     print("\nI'm Draco Malfoy. It's best to choose your friends carefully from the start, don't you think?\n")
     while True:
-        choice = input("1. Shake his hand politely.\n2. Ignore him completely.\n3. Respond with arrogance.\nYour choice: ").strip()
+        choice = input("1. Shake his hand politely.\n2. Ignore him completely.\n3. Respond with arrogance.\n\nYour choice: ").strip()
         if choice == "1":
             print("Draco nods approvingly: — Hmph, not bad.")
             character['Attributes']['Ambition'] = character['Attributes'].get('Ambition', 0) + 1
