@@ -1,3 +1,5 @@
+from universe.house import assign_house
+
 def meet_friends(character):
     """Simple encounters with Ron, Hermione and Draco that update attributes.
 
@@ -70,3 +72,36 @@ def welcome_message():
     )
     print(message)
     input("\nPress Enter when you are ready to continue...")
+
+
+
+def sorting_ceremony(character):
+    """Ask a short set of questions to determine the player's house.
+
+    Uses a list of tuples (question, choices, houses) and calls `assign_house`.
+    Updates `character["House"]` and prints a short narrative message.
+    """
+
+    questions = [ 
+    ( 
+        "You see a friend in danger. What do you do?", 
+        ["Rush to help", "Think of a plan", "Seek help", "Stay calm and observe"], 
+        ["Gryffindor", "Slytherin", "Hufflepuff", "Ravenclaw"] 
+    ), 
+    ( 
+        "Which trait describes you best?", 
+        ["Brave and loyal", "Cunning and ambitious", "Patient and hardworking", "Intelligent and curious"], 
+        ["Gryffindor", "Slytherin", "Hufflepuff", "Ravenclaw"] 
+    ), 
+    ( 
+        "When faced with a difficult challenge, you...", 
+        ["Charge in without hesitation", "Look for the best strategy", "Rely on your friends", "Analyze the problem"], 
+        ["Gryffindor", "Slytherin", "Hufflepuff", "Ravenclaw"] 
+    )
+    ]
+
+    assigned = assign_house(character, questions)
+    character["House"] = assigned
+
+    print(f"\nThe Sorting Hat thinks for a moment, then announces: {assigned}!")
+    input("\nPress Enter to continue...") 
