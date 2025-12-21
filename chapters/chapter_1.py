@@ -79,17 +79,10 @@ def buy_supplies(character):
     display_character(character)
 
 def start_chater_1():
-
     introduction()
-
     character = create_character()
-
     receive_letter()
-
     meet_hagrid(character)
-
     buy_supplies(character)
-
     print("\nEnd of Chapter 1! Your adventure begins at Hogwarts...")
-
     return(character)
