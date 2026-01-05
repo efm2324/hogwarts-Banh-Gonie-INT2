@@ -1,10 +1,9 @@
 import sys
 from pathlib import Path
 
-# Add the parent directory to sys.path so we can import utils (doesn't work without this)
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from utils.input_utils import load_file
+from utils.input_utils import ask_choice
 
 houses = {
     "Gryffindor": 0,
@@ -26,82 +25,41 @@ questions = [
     ), 
     ( 
         "When faced with a difficult challenge, you...", 
-        ["Charge in without hesitation", "Look for the best strategy", "Rely on your friends", 
-        "Analyze the problem"], 
+        ["Charge in without hesitation", "Look for the best strategy", "Rely on your friends", "Analyze the problem"], 
         ["Gryffindor", "Slytherin", "Hufflepuff", "Ravenclaw"] 
     ) 
 ]
 
-def update_house_points(houses, house_name, points):
-    if house_name in houses:
-        houses[house_name] += points
-        return houses
-    else :
+def update_house_points(house_dict, house_name, points):
+    if house_name in house_dict:
+        house_dict[house_name] += points
+        return house_dict
+    else:
         print("House not found.")
         return False
 
-def display_winning_house(houses):
-    max_points = max(houses.values())
-    winning_houses = [house for house, points in houses.items() if points == max_points]
+def display_winning_house(house_dict):
+    max_pts = max(house_dict.values())
+    winners = [h for h, p in house_dict.items() if p == max_pts]
     
-    if len(winning_houses) > 1:
-        print(f"It's a tie! {', '.join(winning_houses)} are tied with {max_points} points!")
+    if len(winners) > 1:
+        print(f"It's a tie! {', '.join(winners)} are tied with {max_pts} points!")
     else:
-        print(f"The winning house is {winning_houses[0]} with {max_points} points!")
+        print(f"The winning house is {winners[0]} with {max_pts} points!")
 
+def assign_house(character, question_list):
 
+    tally = {"Gryffindor": 0, "Slytherin": 0, "Hufflepuff": 0, "Ravenclaw": 0}
 
-def assign_house(character, questions):
-    """Ask the sorting questions using only simple constructs and return the assigned house.
+    for q_text, choices, related_houses in question_list:
+        user_choice_text = ask_choice(f"\n{q_text}", choices)
 
-    `questions` is a list of tuples: (question_text, choices_list, houses_list)
-    This function uses basic variables and loops to tally votes and pick a winner.
-    """
-    gryff = 0
-    slyth = 0
-    huffle = 0
-    raven = 0
+        choice_index = choices.index(user_choice_text)
+        assigned_house = related_houses[choice_index]
 
-    for q_text, choices, houses in questions:
-        print("\n" + q_text)
-        # show choices with simple loop
-        i = 1
-        for choice in choices:
-            print(str(i) + ". " + choice)
-            i += 1
+        tally[assigned_house] += 1
 
-        # get valid choice
-        while True:
-            ans = input("Your choice: ").strip()
-            if not ans.isdigit():
-                print("Please enter the number of your choice.")
-                continue
-            idx = int(ans)
-            if idx < 1 or idx > len(choices):
-                print("Invalid choice number. Try again.")
-                continue
-            chosen_house = houses[idx - 1]
-            if chosen_house == "Gryffindor":
-                gryff += 1
-            elif chosen_house == "Slytherin":
-                slyth += 1
-            elif chosen_house == "Hufflepuff":
-                huffle += 1
-            elif chosen_house == "Ravenclaw":
-                raven += 1
-            break
-
-    # determine winner with simple comparisons
-    winner = "Gryffindor"
-    max_points = gryff
-    if slyth > max_points:
-        winner = "Slytherin"
-        max_points = slyth
-    if huffle > max_points:
-        winner = "Hufflepuff"
-        max_points = huffle
-    if raven > max_points:
-        winner = "Ravenclaw"
-        max_points = raven
-
-    return winner
+    final_house = max(tally, key=tally.get)
+    
+    print(f"\nSorting Hat: 'Better be... {final_house.upper()}!'")
+    return final_house

@@ -1,96 +1,82 @@
 import sys
 from pathlib import Path
-from utils.input_utils import load_file, ask_number, ask_choice
 
-# Add the parent directory to sys.path so we can import utils (doesn't work without this)
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from universe.character import init_character
-from universe.character import display_character
+from utils.input_utils import ask_number, ask_choice
+from universe.character import init_character, display_character, modify_money, add_item
 
 def introduction():
-    message = (
-        ""
-    )
-    print(message)
+    print("\n*** WELCOME TO HOGWARTS ***")
+    print("You are a young witch or wizard about to discover a world of magic.")
     input("\nPress Enter when you are ready to continue...")
 
 def create_character():
+    print("\nCharacter Creation")
     first_name = input("Enter your first name: ")
     last_name = input("Enter your last name: ")
+
     attributes = {
-        "Courage": int(input("Enter your Courage level (1-10): ")),
-        "Intelligence": int(input("Enter your Intelligence level (1-10): ")),
-        "Loyalty": int(input("Enter your Loyalty level (1-10): ")),
-        "Ambition": int(input("Enter your Ambition level (1-10): "))
+        "Courage": ask_number("Enter your Courage level (1-10): ", 1, 10),
+        "Intelligence": ask_number("Enter your Intelligence level (1-10): ", 1, 10),
+        "Loyalty": ask_number("Enter your Loyalty level (1-10): ", 1, 10),
+        "Ambition": ask_number("Enter your Ambition level (1-10): ", 1, 10)
     }
+    
     character = init_character(last_name, first_name, attributes)
     display_character(character)
     return character
 
 def receive_letter():
-    print(
-    "An owl flies through the window, delivering a letter sealed with the Hogwarts crest..." 
-    "\n“Dear Student, \nWe are pleased to inform you that you have been accepted to Hogwarts School of Witchcraft and Wizardry!”"
-    "\nDo you accept this invitation and go to Hogwarts?"
-    )# add time for dramatic effect
-    answer = int(input("1. Yes, of course! \n2. No, I'd rather stay with Uncle Vernon... ").strip())
-    print("Your choice : ", answer)
-    if answer == 1:
-        print("You have accepted the invitation to Hogwarts!")
-    else:
-        print("You have declined the invitation to Hogwarts. The adventure ends here.")
-        exit(0)
+    print("\nAn owl flies through the window, delivering a letter sealed with the Hogwarts crest...")
+    print("“Dear Student, We are pleased to inform you that you have been accepted...”")
+
+    options = ["Yes, of course!", "No, I'd rather stay with Uncle Vernon..."]
+    choice = ask_choice("Do you accept this invitation?", options)
+    
+    if "No" in choice:
+        print("\nYou have declined the invitation. The adventure ends here.")
+        sys.exit(0)
+    print("\nYou have accepted! Pack your bags.")
 
 def meet_hagrid(character):
-    print(
-    "On your way to Diagon Alley, a giant of man with a wild beard and kind eyes approaches you." 
-    "\n“Hello there! I'm Hagrid, Keeper of Keys and Grounds at Hogwarts."
-    "\nLet me help you get your school supplies!” \n"
-    )
-    while True:
-        try:
-            answer = int(input("1. Yes \n2. No ").strip())
-        except ValueError:
-            print("Invalid input. Please enter the number 1 or 2.")
-            continue
-
-        print("Your choice : ", answer)
-        if answer == 1:
-            print("Hagrid takes you to Diagon Alley, where you buy your wand, books, and robes.")
-            break
-        elif answer == 2:
-            print("Hagrid gently insists and takes you along anyway!")
-            break
-        else:
-            print("Invalid choice. Please choose 1 or 2.")
+    print("\nA giant of a man approaches you: 'I'm Hagrid, Keeper of Keys and Grounds!'")
+    options = ["Go with Hagrid", "Refuse"]
+    choice = ask_choice("Will you follow him to Diagon Alley?", options)
     
+    if "Refuse" in choice:
+        print("'Blimey,' says Hagrid. He picks you up anyway. 'No time for that!'")
+    else:
+        print("Hagrid smiles. 'Right then, let's go!'")
+
 def buy_supplies(character):
-    print("Welcome to Diagon Alley!")
-
-    catalog = load_file("data/inventory.json") 
-
+    print("\n Welcome to Diagon Alley ")
+    
     required_items = ["Magic Wand", "Wizard Robe", "Potions Book"] 
 
-    while required_items:
-        print(f"You have {character['Money']} Galleons.")
-        print(f"Remaining required items: {', '.join(required_items)}")
+    for item in required_items:
+        print(f"\nYou need to buy: {item}")
+        print(f"Current Gold: {character['Money']} Galleons")
+        input(f"Press Enter to purchase {item} for 10 Galleons...")
         
-        choice = ask_number("Enter the number of the item to buy: ")
-        
-    print("All required items purchased! Choose your pet:")
+        modify_money(character, -10)
+        add_item(character, "Inventory", item)
+
+    print("\nAll required items purchased! Time for a pet.")
     pets = ["Owl", "Cat", "Rat", "Toad"]
     pet_prices = {"Owl": 20, "Cat": 15, "Rat": 10, "Toad": 5}
     
-    pet_choice = ask_choice("Which pet do you want?", pets)
+    chosen_pet = ask_choice("Which pet do you want?", pets)
+    price = pet_prices[chosen_pet]
+    
+    modify_money(character, -price)
+    add_item(character, "Inventory", chosen_pet)
 
-    display_character(character)
-
-def start_chater_1():
+def start_chapter_1():
     introduction()
     character = create_character()
     receive_letter()
     meet_hagrid(character)
     buy_supplies(character)
-    print("\nEnd of Chapter 1! Your adventure begins at Hogwarts...")
-    return(character)
+    print("\nEnd of Chapter 1! You are ready for the Hogwarts Express.")
+    return character

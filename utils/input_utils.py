@@ -11,26 +11,29 @@ def ask_text(message):
 def ask_number(message, min_value=None, max_value=None):
     while True:
         try:    
-            courage_lv = int(input(message))
+            value = int(input(message))
+            if min_value is not None and value < min_value:
+                print(f"Please enter a number greater than or equal to {min_value}.")
+                continue
+            if max_value is not None and value > max_value:
+                print(f"Please enter a number less than or equal to {max_value}.")
+                continue
+                
+            return value
         except ValueError:
-            print("enter a valid number.")
-            continue 
-        while courage_lv < min_value or courage_lv > max_value:
-            print(f"Please enter a number between {min_value} and {max_value}.")
-            courage_lv = int(input(message))
-        return courage_lv
+            print("Invalid input. Please enter a valid whole number.")
 
-def ask_choice(message, option):
+def ask_choice(message, options_list):
     print(message)
-    for i, option in enumerate(option, 1):
-        print(f"{i}. {option}")
+    for i, opt in enumerate(options_list, 1):
+        print(f"{i}. {opt}")
 
-    choice = ask_number("Your choice: ", 1, len(option))
-    return option[choice - 1]
+    choice = ask_number("Your choice: ", 1, len(options_list))
+    return options_list[choice - 1]
 
 def load_file(file_path):
-    try :
-        with open(file_path, "r", encoding="utf-8") as f:
+    try:
+        with open(file_path, "r") as f:
             return json.load(f)
     except FileNotFoundError:
         print(f"The file was not found: {file_path}")
@@ -39,4 +42,3 @@ def load_file(file_path):
     except Exception as e:
         print(f"There was an error loading the file {file_path}: {e}")
     return None
-

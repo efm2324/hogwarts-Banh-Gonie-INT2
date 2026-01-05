@@ -1,47 +1,51 @@
-#import difflib
-from utils.input_utils import load_file
-
-
 def init_character(last_name, first_name, attributes):
-    character = {
+
+    return {
         "Last Name": str(last_name),
         "First Name": str(first_name),
+        "House": None,      # Added this as Chapter 1 assigns a house
         "Money": 100,
         "Inventory": [],
         "Spells": [],
         "Attributes": attributes
     }
-    return character
 
 def display_character(character):
-    print("Character profile:")
-    print(f"Last name: {character.get('Last Name')}")
-    print(f"First name: {character.get('First Name')}")
-    print(f"Money: {character.get('Money', 0)}")
-    print("Inventory:")
-    print("Spells:")
-    print("Attributes:")
-    attributes_dict = character.get("Attributes", {})
-    attribute_keys = ["Courage", "Intelligence", "Loyalty", "Ambition"]
-    for attr in attribute_keys:
-        value = attributes_dict.get(attr)
-        if value is not None:
-            print(f"- {attr}: {value}")
-        
-def modify_money(character, amount):
-    character["Money"] += amount
-    return character["Money"]
     
-def add_item(character, key, item):
-    # avoid duplicates
-    if item in character["Inventory"] or item in character["Spells"]:
+    print("\n--- CHARACTER PROFILE ---")
+    print(f"Name: {character.get('First Name')} {character.get('Last Name')}")
+    print(f"House: {character.get('House', 'Not yet sorted')}")
+    print(f"Money: {character.get('Money', 0)} Galleons")
+    print("Attributes:")
+    attrs = character.get("Attributes", {})
+    for attr, value in attrs.items():
+        print(f"  - {attr}: {value}")
+
+    inventory = character.get("Inventory", [])
+    print(f"Inventory: {', '.join(inventory) if inventory else 'Empty'}")
+    
+    spells = character.get("Spells", [])
+    print(f"Spells Learned: {', '.join(spells) if spells else 'None'}")
+    print("-------------------------\n")
+
+def modify_money(character, amount):
+
+    character["Money"] += amount
+    if character["Money"] < 0:
+        character["Money"] = 0
+    return character["Money"]
+
+def add_item(character, category, item):
+
+    if category not in ["Inventory", "Spells"]:
+        print(f"Error: {category} is not a valid category.")
+        return False
+
+    current_list = character[category]
+    if any(i.lower() == item.lower() for i in current_list):
+        print(f"You already have {item}!")
         return False
     
-    if key == "Inventory":
-        character["Inventory"].append(item)
-        return True
-    elif key == "Spells":
-        character["Spells"].append(item)
-        return True
-    
-    return "Item not found. Check spelling."
+    character[category].append(item)
+    print(f"Added to {category}: {item}")
+    return True

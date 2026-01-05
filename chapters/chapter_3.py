@@ -1,14 +1,22 @@
 import random
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from utils.input_utils import load_file, ask_choice
 from universe.house import update_house_points
 from universe.character import add_item
 
-def learn_spells(character, file_path="../data/spells.json"):
-
-    print("\nYou begin your magic lessons at Hogwarts...")
+def learn_spells(character, file_path="data/spells.json"):
+    print("\nTHE MAGIC CLASSROOM")
+    print("Professor Flitwick: 'Swish and flick, everyone!'")
     
     all_spells = load_file(file_path)
-    
+    if not all_spells:
+        print("Error: Could not load spells database.")
+        return
+
     requirements = {
         "Offensive": 1,
         "Defensive": 1,
@@ -19,65 +27,90 @@ def learn_spells(character, file_path="../data/spells.json"):
     learned_count = 0
 
     while learned_count < total_to_learn:
-
         available_pool = [
             s for s in all_spells 
-            if requirements[s['type']] > 0 and s['name'] not in character['Spells']
+            if requirements.get(s['type'], 0) > 0 and s['name'] not in character['Spells']
         ]
 
-        chosen_spell = random.choice(available_pool)
+        if not available_pool:
+            available_pool = [s for s in all_spells if s['name'] not in character['Spells']]
 
-        add_item(character, "Spells", chosen_spell['name'])
-        requirements[chosen_spell['type']] -= 1
-        learned_count += 1
-        
-        print(f"You have just learned the  spell: {chosen_spell['name']} ({chosen_spell['type']})")
-        input("\nPress Enter to continue...")
-
-    print("\nYou have completed your basic spell training at Hogwarts!")
-    print("\nHere are the spells you now master:")
-
-    for spell_name in character['Spells']:
-            # Find the specific spell dictionary that matches the name
-            spell_data = next((s for s in all_spells if s['name'] == spell_name), None)
+        if available_pool:
+            chosen_spell = random.choice(available_pool)
+            add_item(character, "Spells", chosen_spell['name'])
             
-            if spell_data:
-                print(f"- {spell_data['name']} ({spell_data['type']}): {spell_data['description']}")
+            if chosen_spell['type'] in requirements:
+                requirements[chosen_spell['type']] -= 1
+            
+            learned_count += 1
+            print(f"Mastered: {chosen_spell['name']} [{chosen_spell['type']}]")
+        else:
+            break
 
-def magic_quiz(character, houses, file_path="../data/magic_quiz.json"):
+    print("\nYour current Spellbook:")
+    for spell_name in character['Spells']:
+        print(f" - {spell_name}")
 
-    print("\nWelcome to the Hogwarts magic quiz !")
-    print(f"Professor Snape: 'Let's see if you were paying attention, {character['First Name']}...'")
+import random
+
+def magic_quiz(character, houses, file_path="data/magic_quiz.json"):
+    print("\n--- PROFESSOR SNAPE'S QUIZ ---")
+    print(f"Snape: 'Let's see if you have anything in that head of yours, {character.get('First Name', 'Student')}...'")
 
     quiz_data = load_file(file_path)
-    score = 0
-    total_questions = len(quiz_data)
+    if not quiz_data:
+        print("Snape: 'The quiz papers are missing. Five points from Gryffindor!'")
+        return
 
-    for item in quiz_data:
+    random.shuffle(quiz_data)
+    
+    score = 0
+    for item in quiz_data[:5]:
         question = item['question']
-        options = item['options']
         correct_answer = item['answer']
 
-        user_choice = ask_choice(question, options)
+        other_answers = [q['answer'] for q in quiz_data if q['answer'] != correct_answer]
+        wrong_choices = random.sample(other_answers, 3)
 
-        if user_choice == correct_answer:
-            print("Correct answer! +25 points for your house.")
+        options = [correct_answer] + wrong_choices
+        random.shuffle(options)
+
+        print(f"\nQuestion: {question}")
+        for i, opt in enumerate(options, 1):
+            print(f"{i}. {opt}")
+
+        while True:
+            user_input = input("Your choice (number): ").strip()
+            
+            if not user_input.isdigit():
+                print("Snape: 'Enter a number, dunderhead.'")
+                continue
+            
+            choice_idx = int(user_input)
+            if 1 <= choice_idx <= len(options):
+                selected_text = options[choice_idx - 1]
+                break
+            else:
+                print(f"Snape: 'Choose a number between 1 and {len(options)}.'")
+
+        if selected_text == correct_answer:
+            print("Snape: '...Correct. Unexpected.'")
             score += 1
         else:
-            print(f"Wrong answer. The correct answer was: {correct_answer}.'")
+            print(f"Snape: 'Wrong. The correct answer was: {correct_answer}.'")
 
-    points_awarded = score*25
+    points_awarded = score * 10
     house_name = character.get("House")
     
-    print(f"\nQuiz Finished! You got {score}/{total_questions} correct.")
+    print(f"\nQuiz Finished! Result: {score}/5")
 
-    update_house_points(houses, house_name, points_awarded)
-
-    from chapters.chapter_3 import learn_spells, magic_quiz
+    if house_name and house_name in houses:
+        houses[house_name] += points_awarded
+        print(f"{points_awarded} points awarded to {house_name}!")
 
 def start_chapter_3(character, houses):
-
+    print("\nCHAPTER 3: LESSONS AND EXAMS")
     learn_spells(character)
     magic_quiz(character, houses)
-    
+    print("\nEnd of Chapter 3! You have survived your first semester.")
     return character
